@@ -14,10 +14,10 @@ git clone https://github.com/terri1102/dotfiles.git
 
 4. Run script
 ```
-chmod +x install_plugins.sh`
+chmod +x setup_zsh.sh`
 ```
 ```
-./install_plugins.sh
+./setup_zsh.sh
 ```
 
 ## Configurations
