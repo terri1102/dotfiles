@@ -14,7 +14,10 @@ git clone https://github.com/terri1102/dotfiles.git
 
 4. Run script
 ```
-chmod +x setup_zsh.sh`
+cd dotfiles
+```
+```
+chmod +x setup_zsh.sh
 ```
 ```
 ./setup_zsh.sh
