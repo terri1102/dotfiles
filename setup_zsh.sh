@@ -36,32 +36,55 @@ create_starship_config() {
 # Copy zshrc
 create_zshrc() {
     echo "Copying .zshrc configuration..."
-    cp -f dot_zshrc ./zshrc || {
+    cp -f dot_zshrc ~/.zshrc || {
         echo "Copy failed" >&2
         return 1
     }
 }
 
 # Set zsh as default shell
+# change_default_shell() {
+#     echo "Changing default shell to ZSH..."
+#     read -r -d '' ZSH_CONFIG << 'EOF'
+# export SHELL=$(which zsh)
+# exec $(which zsh) -l
+# EOF
+
+#     if [ -f "$HOME/.bash_profile" ]; then
+#         echo "$ZSH_CONFIG" >> "$HOME/.bash_profile"
+#         echo "Added configuration to .bash_profile"
+#     elif [ -f "$HOME/.profile" ]; then
+#         echo "$ZSH_CONFIG" >> "$HOME/.profile"
+#         echo "Added configuration to .profile"
+#     else
+#         echo "$ZSH_CONFIG" > "$HOME/.profile"
+#         echo "Created .profile with configuration"
+#     fi
+# }
+
 change_default_shell() {
-    echo "Changing default shell to ZSH..."
     read -r -d '' ZSH_CONFIG << 'EOF'
 export SHELL=$(which zsh)
 exec $(which zsh) -l
 EOF
 
     if [ -f "$HOME/.bash_profile" ]; then
-        echo "$ZSH_CONFIG" >> "$HOME/.bash_profile"
-        echo "Added configuration to .bash_profile"
+        echo "$ZSH_CONFIG" >> "$HOME/.bash_profile" || {
+            echo "Error: Failed to write to .bash_profile"
+            return 1
+        }
     elif [ -f "$HOME/.profile" ]; then
-        echo "$ZSH_CONFIG" >> "$HOME/.profile"
-        echo "Added configuration to .profile"
+        echo "$ZSH_CONFIG" >> "$HOME/.profile" || {
+            echo "Error: Failed to write to .profile"
+            return 1
+        }
     else
-        echo "$ZSH_CONFIG" > "$HOME/.profile"
-        echo "Created .profile with configuration"
+        echo "$ZSH_CONFIG" > "$HOME/.profile" || {
+            echo "Error: Failed to create .profile"
+            return 1
+        }
     fi
 }
-
 
 
 # Main function
