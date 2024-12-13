@@ -11,7 +11,8 @@ install_oh_my_zsh() {
 # Starship
 install_starship() {
     echo "Installing Starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin
+    mkdir -p ~/.local/bin
+    curl -sS https://starship.rs/install.sh | sh -s -- -y -b ~/.local/bin
 
 }
 
