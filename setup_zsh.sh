@@ -9,7 +9,8 @@ install_oh_my_zsh() {
 # Starship
 install_starship() {
     echo "Installing Starship..."
-    curl -sS https://starship.rs/install.sh | sh
+    curl -sS https://starship.rs/install.sh | sh -s -- -b ~/.local/bin
+
 }
 
 # ZSH plugins
@@ -36,18 +37,32 @@ create_zshrc() {
         echo "Copy failed" >&2
         return 1
     }
-    source ./zshrc
 }
 
 # Set zsh as default shell
 change_default_shell() {
     echo "Changing default shell to ZSH..."
-    chsh -s $(which zsh)
+    read -r -d '' ZSH_CONFIG << 'EOF'
+export SHELL=$(which zsh)
+exec $(which zsh) -l
+EOF
+
+    if [ -f "$HOME/.bash_profile" ]; then
+        echo "$ZSH_CONFIG" >> "$HOME/.bash_profile"
+        echo "Added configuration to .bash_profile"
+    elif [ -f "$HOME/.profile" ]; then
+        echo "$ZSH_CONFIG" >> "$HOME/.profile"
+        echo "Added configuration to .profile"
+    else
+        echo "$ZSH_CONFIG" > "$HOME/.profile"
+        echo "Created .profile with configuration"
+    fi
 }
+
+
 
 # Main function
 main() {
-    install_packages
     install_oh_my_zsh
     install_starship
     install_plugins
