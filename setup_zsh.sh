@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e  # Exit on error
+
 # Oh My Zsh
 install_oh_my_zsh() {
     echo "Installing Oh My Zsh..."
