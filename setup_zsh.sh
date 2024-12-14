@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# set -e  # Exit on error
-set -x # Debug mode
+set -e  # Exit on error
+# set -x # Debug mode
 
 # Oh My Zsh
 install_oh_my_zsh() {
