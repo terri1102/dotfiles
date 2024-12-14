@@ -1,39 +1,69 @@
 #!/bin/bash
 
-set -e  # Exit on error
-# set -x # Debug mode
+# set -e  # Exit on error
+set -x # Debug mode
+
+# Check if a command exists
+command_exists() {
+    command -v "$1" &> /dev/null
+}
 
 # Oh My Zsh
 install_oh_my_zsh() {
-    echo "Installing Oh My Zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    if [ -d "$HOME/.oh-my-zsh" ]; then
+        echo "Oh My Zsh is already installed. Skipping..."
+    else
+        echo "Installing Oh My Zsh..."
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    fi
 }
 
 # Starship
 install_starship() {
-    echo "Installing Starship..."
-    mkdir -p ~/.local/bin
-    curl -sS https://starship.rs/install.sh | sh -s -- -y -b ~/.local/bin
-
+    if command_exists starship; then
+        echo "Starship is already installed. Skipping..."
+    else
+        echo "Installing Starship..."
+        mkdir -p ~/.local/bin
+        curl -sS https://starship.rs/install.sh | sh -s -- -y -b ~/.local/bin
+    fi
 }
 
 # ZSH plugins
 install_plugins() {
     echo "Installing ZSH plugins..."
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    git clone https://github.com/wting/autojump.git && cd autojump && ./install.py
-}
+    if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+    else
+        echo "zsh-autosuggestions is already installed. Skipping..."
+    fi
 
+    if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    else
+        echo "zsh-syntax-highlighting is already installed. Skipping..."
+    fi
+
+    if command_exists autojump; then
+        echo "autojump is already installed. Skipping..."
+    else
+        git clone https://github.com/wting/autojump.git && cd autojump && ./install.py && cd ..
+        rm -rf autojump
+    fi
+}
 
 # Copy Starship config
 create_starship_config() {
     echo "Creating Starship configuration..."
     mkdir -p ~/.config
-    cp -f dot_starship ~/.config/starship.toml || {
-        echo "Copy failed" >&2
-        return 1
-    }
+    if [ -f "~/.config/starship.toml" ]; then
+        echo "Starship configuration already exists. Skipping..."
+    else
+        cp -f dot_starship ~/.config/starship.toml || {
+            echo "Copy failed" >&2
+            return 1
+        }
+    fi
 }
 
 # Copy zshrc
@@ -44,32 +74,6 @@ create_zshrc() {
         return 1
     }
 }
-
-
-# change_default_shell() {
-#     read -r -d '' ZSH_CONFIG << 'EOF'
-# export SHELL=$(which zsh)
-# exec $(which zsh) -l
-# EOF
-
-#     if [ -f "$HOME/.bash_profile" ]; then
-#         echo "$ZSH_CONFIG" >> "$HOME/.bash_profile" || {
-#             echo "Error: Failed to write to .bash_profile"
-#             return 1
-#         }
-#     elif [ -f "$HOME/.profile" ]; then
-#         echo "$ZSH_CONFIG" >> "$HOME/.profile" || {
-#             echo "Error: Failed to write to .profile"
-#             return 1
-#         }
-#     else
-#         echo "$ZSH_CONFIG" > "$HOME/.profile" || {
-#             echo "Error: Failed to create .profile"
-#             return 1
-#         }
-#     fi
-# }
-
 
 change_default_shell() {
     echo "Changing default shell..."
