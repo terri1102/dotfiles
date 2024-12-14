@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e  # Exit on error
+# set -e  # Exit on error
+set -x # Debug mode
 
 # Oh My Zsh
 install_oh_my_zsh() {
@@ -42,50 +43,60 @@ create_zshrc() {
     }
 }
 
-# Set zsh as default shell
+
 # change_default_shell() {
-#     echo "Changing default shell to ZSH..."
 #     read -r -d '' ZSH_CONFIG << 'EOF'
 # export SHELL=$(which zsh)
 # exec $(which zsh) -l
 # EOF
 
 #     if [ -f "$HOME/.bash_profile" ]; then
-#         echo "$ZSH_CONFIG" >> "$HOME/.bash_profile"
-#         echo "Added configuration to .bash_profile"
+#         echo "$ZSH_CONFIG" >> "$HOME/.bash_profile" || {
+#             echo "Error: Failed to write to .bash_profile"
+#             return 1
+#         }
 #     elif [ -f "$HOME/.profile" ]; then
-#         echo "$ZSH_CONFIG" >> "$HOME/.profile"
-#         echo "Added configuration to .profile"
+#         echo "$ZSH_CONFIG" >> "$HOME/.profile" || {
+#             echo "Error: Failed to write to .profile"
+#             return 1
+#         }
 #     else
-#         echo "$ZSH_CONFIG" > "$HOME/.profile"
-#         echo "Created .profile with configuration"
+#         echo "$ZSH_CONFIG" > "$HOME/.profile" || {
+#             echo "Error: Failed to create .profile"
+#             return 1
+#         }
 #     fi
 # }
 
+
 change_default_shell() {
+    echo "Changing default shell..."
     read -r -d '' ZSH_CONFIG << 'EOF'
 export SHELL=$(which zsh)
 exec $(which zsh) -l
 EOF
 
     if [ -f "$HOME/.bash_profile" ]; then
+        echo "Writing to .bash_profile..."
         echo "$ZSH_CONFIG" >> "$HOME/.bash_profile" || {
-            echo "Error: Failed to write to .bash_profile"
+            echo "Error: Failed to write to .bash_profile" >&2
             return 1
         }
     elif [ -f "$HOME/.profile" ]; then
+        echo "Writing to .profile..."
         echo "$ZSH_CONFIG" >> "$HOME/.profile" || {
-            echo "Error: Failed to write to .profile"
+            echo "Error: Failed to write to .profile" >&2
             return 1
         }
     else
+        echo "Creating .profile..."
         echo "$ZSH_CONFIG" > "$HOME/.profile" || {
-            echo "Error: Failed to create .profile"
+            echo "Error: Failed to create .profile" >&2
             return 1
         }
     fi
+    echo "Shell change completed successfully"
 }
-
 
 # Main function
 main() {
