@@ -25,12 +25,8 @@ chmod +x setup_zsh.sh
 
 ## Configurations
 - ZSH plugins
-- terminal theme(powerlevel10k)
+- terminal theme(Starship)
 - font: MESLOGS NF
-- tmux(Homebrew)
 - cli tools: fzf
-- NeoVim
-- anaconda
-MAC) - Homebrew:
 Linux) - apt
   
