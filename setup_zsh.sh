@@ -22,7 +22,9 @@ install_plugins() {
     echo "Installing ZSH plugins..."
     git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone git://github.com/wting/autojump.git && cd autojump && ./install.py
 }
+
 
 # Copy Starship config
 create_starship_config() {

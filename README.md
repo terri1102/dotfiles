@@ -1,5 +1,5 @@
 ## To get started
-1. Install packages
+1. Install packages (if you have sudo previleges)
 ```bash
 sudo apt update
 ```
