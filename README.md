@@ -4,7 +4,7 @@
 sudo apt update
 ```
 ```bash
-sudo apt install -y zsh curl git tmux tree
+sudo apt install -y zsh curl git tmux tree fzf bat
 ```
 
 2. Clone this repo
