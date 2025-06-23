@@ -15,8 +15,15 @@ source $ZSH/oh-my-zsh.sh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
 
-# starship
-eval "$(starship init zsh)"
+# Alias
+function git_readd() {
+    git diff --name-only --staged | xargs git add
+}
+alias git-readd="git_readd"
+alias git-push-pwl="git push --force-with-lease"
 
 # autojump
 [[ -s $HOME/.autojump/etc/profile.d/autojump.sh ]] && source $HOME/.autojump/etc/profile.d/autojump.sh
+
+# starship
+eval "$(starship init zsh)"
