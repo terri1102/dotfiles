@@ -19,6 +19,7 @@ $elm\
 $golang\
 $gradle\
 $haskell\
+$conda\
 $python\
 $java\
 $julia\
@@ -156,7 +157,14 @@ format = '[ $symbol ($version) ]($style)'
 [python]
 symbol = " "
 style = "bg:#86BBD8 fg:#171716"
-format = '[ $symbol($virtualenv) ]($style)'
+format = '[ $symbol($version)($virtualenv)]($style)'
+detect_extensions = ["py"]
+
+[conda]
+format = '[ $symbol$environment ]($style)'
+symbol = "󱔎 "
+style = "bg:#86BBD8 fg:#171716"
+ignore_base = false
 
 [time]
 disabled = false
